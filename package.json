@@ -6,8 +6,8 @@
   "scripts": {
     "start": "electron .",
     "postinstall": "electron-builder install-app-deps",
-    "build": "electron-builder -mwl",
-    "release": "electron-builder -mwl --publish always"
+    "build": "electron-builder --windows",
+    "release": "electron-builder --windows --publish always"
   },
   "repository": {
     "type": "git",
