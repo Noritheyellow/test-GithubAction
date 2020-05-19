@@ -1,6 +1,9 @@
 name: Build/release
 
-on: push
+on:
+  push:
+    branches:
+      - electron
 
 jobs:
   release:
