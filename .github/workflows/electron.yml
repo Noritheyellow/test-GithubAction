@@ -45,13 +45,19 @@ jobs:
       - name: see directory in electron_dist
         run: ls ./dist
         # A Github Action that uploads a file to a new release.
-      - uses: lucyio/upload-to-release@master
+#      - uses: lucyio/upload-to-release@master
+#        with:
+#          name: Noritheyellow/test-GithubAction
+#          path: ./dist
+#          action: unpublished
+#          release_id: 1.0.0
+#          release-repo: Noritheyellow/test-GithubAction
+      - name: Upload-to-release
+        uses: JasonEtco/upload-to-release@master
         with:
-          name: Noritheyellow/test-GithubAction
-          path: ./dist
-          action: unpublished
-          release_id: 1.0.0
-          release-repo: Noritheyellow/test-GithubAction
+          args: my-image.tar
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build_on_win:
     # windows 2019 has too many dependency issues & github windows server is 2016
@@ -96,10 +102,16 @@ jobs:
       - name: see directory
         run: cd ./dist && dir
         # 잘 되긴 하는데 이건 작성자가 만든 action이므로 다른 더 안정적인 걸 추천하고 있음.
-      - uses: lucyio/upload-to-release@master
-        with:
-          name: Noritheyellow/test-GithubAction
-          path: ./dist/squirrel-windows
-          action: unpublished
-          release_id: 1.0.0
-          release-repo: Noritheyellow/test-GithubAction
+#      - uses: lucyio/upload-to-release@master
+#        with:
+#          name: Noritheyellow/test-GithubAction
+#          path: ./dist/squirrel-windows
+#          action: unpublished
+#          release_id: 1.0.0
+#          release-repo: Noritheyellow/test-GithubAction
+      - name: Upload-to-release
+          uses: JasonEtco/upload-to-release@master
+          with:
+            args: my-image.tar
+          env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
