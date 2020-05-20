@@ -6,8 +6,8 @@
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "start": "electron .",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder -mw"
+    "build": "electron-builder --mac --windows --linux",
+    "release": "electron-builder --mac --windows --linux --publish always"
   },
   "repository": {
     "type": "git",
@@ -34,7 +34,7 @@
       "icon": "build/icon.ico"
     },
     "mac": {
-      "target": "tar.gz",
+      "target": "dmg",
       "icon": "build/icon.icns"
     }
   }
