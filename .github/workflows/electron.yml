@@ -54,7 +54,7 @@ jobs:
 #          release-repo: Noritheyellow/test-GithubAction
       - uses: JasonEtco/upload-to-release@master
         with:
-          args: my-image.tar
+          args: ./dist/test-githubaction Setup 1.0.0.dmg
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -110,6 +110,6 @@ jobs:
 #          release-repo: Noritheyellow/test-GithubAction
       - uses: JasonEtco/upload-to-release@master
         with:
-          args: my-image.tar
+          args: ./dist/test-githubaction Setup 1.0.0.exe
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
