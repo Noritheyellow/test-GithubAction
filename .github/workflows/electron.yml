@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: 10.16
       - name: see directory in electron_dist
-        run: ls ./dist
+        run: ls
       - name: add key to single keychain
         # what's this? install security?
         run: security import ./dist/june-ai-single2-certs-electron.p12 -P ${{ secrets.CSC_KEY_PASSWORD }}
@@ -68,9 +68,9 @@ jobs:
       # 몇몇 electron pkg는 이게 없으면 not build properly(comment it if you dont need)
       - name: Set node config to set msvs_version to 2015
         run: npm config set msvs_version 2015
-      # windows의 node는 electron을 build할 때 vs lib를 사용하기도 한다.
-      - name: Work around for Windows Server 2019
-        run: set path=%path%;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin
+      # windows의 node는 electron을 build할 때 vs lib를 사용하기도 한다.(필요없으면 comment)
+#      - name: Work around for Windows Server 2019
+#        run: set path=%path%;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin
       - name: Install dependencies
         run: yarn install
       # window에서 환경 변수 확인은 'set'으로 함.
