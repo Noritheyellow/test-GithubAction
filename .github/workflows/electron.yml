@@ -30,7 +30,7 @@ jobs:
           ELECTRON: true
           APP_VERSION_NUMBER: 1.0.0
         # 'build'라는 명령은 default가 아니다. package.json의 script를 수행하는 것이다.
-        run: yarn dist
+        run: yarn build
       - name: Build Electron
         env:
           ELECTRON: true
@@ -54,7 +54,7 @@ jobs:
 
   build_on_win:
     # windows 2019 has too many dependency issues & github windows server is 2016
-    runs-on: windows-latest
+    runs-on: windows-2016
     steps:
       - uses: actions/checkout@v2
         with:
@@ -85,7 +85,7 @@ jobs:
         env:
           ELECTRON: true
           APP_VERSION_NUMBER: 0.5.9
-        run: yarn dist
+        run: yarn build
       - name: Build Electron
         env:
           ELECTRON: true
