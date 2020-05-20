@@ -9,6 +9,8 @@ on:
 # this is where the magic happens, each job happens in parallel btw
 jobs:
   build_on_mac:
+    # github에서는 macOS, Windows, Linux를 전부 지원한다고 한다.
+    # github가 제공해주는 platform 중 무엇 위에서 돌릴 것인지다.(runs-on)
     runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v2
@@ -18,16 +20,16 @@ jobs:
         with:
           node-version: 10.16
       - name: see directory
-        run: ls
+        run: ls -al
 
   build_on_win:
     runs-on: windows-2016
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: feature/github-actions
+          ref: electron
       - uses: actions/setup-node@v1
         with:
           node-version: 10.16
       - name: see directory
-        run: ls
+        run: ls -al
