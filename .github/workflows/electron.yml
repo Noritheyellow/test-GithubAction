@@ -1,7 +1,10 @@
 # name of your github action
 name: CI
 # this will help you specify where to run
-on: push
+on:
+  push:
+    branches:
+      - electron
 
 # this is where the magic happens, each job happens in parallel btw
 jobs:
@@ -13,18 +16,18 @@ jobs:
           ref: electron
       - uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 10.16
       - name: see directory
         run: ls
 
   build_on_win:
-    runs-on: windows-2016
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
         with:
           ref: feature/github-actions
       - uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 10.16
       - name: see directory
         run: ls
