@@ -94,7 +94,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn electron:buildWin
       - name: see directory
-        run: ls ./dist/squirrel-windows
+        run: cd ./dist && dir
         # 잘 되긴 하는데 이건 작성자가 만든 action이므로 다른 더 안정적인 걸 추천하고 있음.
       - uses: lucyio/upload-to-release@master
         with:
