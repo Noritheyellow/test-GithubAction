@@ -7,7 +7,7 @@
     "postinstall": "electron-builder install-app-deps",
     "start": "electron .",
     "build": "electron-builder",
-    "release": "electron-builder --mac --windows --linux --publish always",
+    "release": "electron-builder --mac --windows --linux",
     "electron:buildUnix": "electron-builder -m --publish always",
     "electron:buildWin": "electron-builder -w --publish always"
   },
