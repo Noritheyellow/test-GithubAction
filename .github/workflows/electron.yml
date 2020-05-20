@@ -23,7 +23,7 @@ jobs:
         run: ls -al
 
   build_on_win:
-    runs-on: windows-2016
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
         with:
@@ -32,4 +32,4 @@ jobs:
         with:
           node-version: 10.16
       - name: see directory
-        run: ls -al
+        run: dir
