@@ -35,6 +35,7 @@ jobs:
         env:
           ELECTRON: true
           CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           APP_VERSION_NUMBER: 1.0.0
         run: yarn electron:buildUnix
       - name: see directory
@@ -90,6 +91,7 @@ jobs:
         env:
           ELECTRON: true
           APP_VERSION_NUMBER: 0.5.9
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn electron:buildWin
       - name: see directory
         run: ls ./dist/squirrel-windows
