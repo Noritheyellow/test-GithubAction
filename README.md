@@ -81,9 +81,208 @@ jobs:
 ~~~
 
 * main action
+~~~yml
+# name of your github action
+name: CI
+# this will help you specify where to run
+on: push
+
+# this is where the magic happens, each job happens in parallel btw
+jobs:
+  build_on_mac:
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: electron
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 10.16
+      - name: see directory in electron_dist
+        run: ls
+      - name: add key to single keychain
+        # what's this? install security?
+#        run: security import ./dist/june-ai-single2-certs-electron.p12 -P ${{ secrets.CSC_KEY_PASSWORD }}
+        run: fastlane run create_keychain name:electron-macKey password:123456
+      - name: electron mac os security identities
+        run: security find-identity -v
+      - name: Install dependencies
+        run: yarn install
+        # now building
+#      - name: Build on MacOS
+#        env:
+#          ELECTRON: true
+#          APP_VERSION_NUMBER: 1.0.0
+#        # 'build'라는 명령은 default가 아니다. package.json의 script를 수행하는 것이다.
+#        run: yarn build
+      - name: Build Electron
+        env:
+          ELECTRON: true
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APP_VERSION_NUMBER: 1.0.0
+        run: yarn electron:buildUnix
+      - name: see directory
+        run: ls
+      - name: check env
+        run: echo $ELECTRON $FEATHERS_URL
+      - name: see directory in electron_dist
+        run: ls ./dist
+        # A Github Action that uploads a file to a new release.
+#      - uses: lucyio/upload-to-release@master
+#        with:
+#          name: Noritheyellow/test-GithubAction
+#          path: ./dist
+#          action: unpublished
+#          release_id: 1.0.0
+#          release-repo: Noritheyellow/test-GithubAction
+      - uses: JasonEtco/upload-to-release@master
+        with:
+          args:
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build_on_win:
+    # windows 2019 has too many dependency issues & github windows server is 2016
+    runs-on: windows-2016
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: electron
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 10.16
+      # 4.0.0 설치 이유: windows 10이 아니어서 걸린다.
+      - name: install node tools
+        run: npm install --global --production windows-build-tools@4.0.0
+      - name: install node-gyp
+        run: npm install --global node-gyp@latest
+      # 몇몇 electron pkg는 이게 없으면 not build properly(comment it if you dont need)
+      - name: Set node config to set msvs_version to 2015
+        run: npm config set msvs_version 2015
+      # windows의 node는 electron을 build할 때 vs lib를 사용하기도 한다.(필요없으면 comment)
+#      - name: Work around for Windows Server 2019
+#        run: set path=%path%;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin
+      - name: Install dependencies
+        run: yarn install
+      # window에서 환경 변수 확인은 'set'으로 함.
+#      - name: check env
+#        env:
+#          ELECTRON: true
+#          APP_VERSION_NUMBER: 0.5.9
+#        run: set
+#      - name: Build on Windows
+#        env:
+#          ELECTRON: true
+#          APP_VERSION_NUMBER: 0.5.9
+#        run: yarn build
+      - name: Build Electron
+        env:
+          ELECTRON: true
+          APP_VERSION_NUMBER: 0.5.9
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: yarn electron:buildWin
+      - name: see directory
+        run: cd ./dist && dir
+        # 잘 되긴 하는데 이건 작성자가 만든 action이므로 다른 더 안정적인 걸 추천하고 있음.
+#      - uses: lucyio/upload-to-release@master
+#        with:
+#          name: Noritheyellow/test-GithubAction
+#          path: ./dist/squirrel-windows
+#          action: unpublished
+#          release_id: 1.0.0
+#          release-repo: Noritheyellow/test-GithubAction
+      - uses: JasonEtco/upload-to-release@master
+        with:
+          args:
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+~~~
 
 ## [Electron Builder Action](https://github.com/marketplace/actions/electron-builder-action)
 
 ~~~
 git commit -am v1.2.3 : 커밋 메세지 작성 + add commit을 한 번에 수행
+~~~
+
+* package.json
+~~~json
+{
+  "name": "test-githubaction",
+  "version": "1.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "electron-builder install-app-deps",
+    "start": "electron .",
+    "build": "electron-builder",
+    "release": "electron-builder --mac --windows --linux",
+    "electron:buildUnix": "electron-builder -m --publish always",
+    "electron:buildWin": "electron-builder -w --publish always"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Noritheyellow/test-GithubAction.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Noritheyellow/test-GithubAction/issues"
+  },
+  "homepage": "https://github.com/Noritheyellow/test-GithubAction#readme",
+  "devDependencies": {
+    "electron": "^9.0.0",
+    "electron-builder": "^22.6.1"
+  },
+  "dependencies": {
+    "g": "^2.0.1",
+    "yarn": "^1.22.4"
+  },
+  "build": {
+    "appId": "nori",
+    "win": {
+      "target":"nsis",
+      "icon": "build/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "build/icon.icns"
+    }
+  }
+}
+~~~
+
+* build.yml
+~~~yml
+name: Build/release
+
+on: push
+
+jobs:
+  release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v1
+
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10
+
+      - name: Build/release Electron app
+        uses: samuelmeuli/action-electron-builder@v1
+        with:
+          # GitHub token, automatically provided to the action
+          # (No need to define this secret in the repo settings)
+          github_token: ${{ secrets.github_token }}
+
+          # If the commit is tagged with a version (e.g. "v1.0.0"),
+          # release the app after building
+          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
 ~~~
