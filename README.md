@@ -286,3 +286,6 @@ jobs:
           # release the app after building
           release: ${{ startsWith(github.ref, 'refs/tags/v') }}
 ~~~
+
+* publish always는 항상 release를 시킨다. 만약 이를 사용하지 않는다면
+tags를 이용하여 release를 할 수 있다.
