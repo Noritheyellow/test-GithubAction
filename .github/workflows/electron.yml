@@ -19,7 +19,7 @@ jobs:
       - name: add key to single keychain
         # what's this? install security?
 #        run: security import ./dist/june-ai-single2-certs-electron.p12 -P ${{ secrets.CSC_KEY_PASSWORD }}
-        run: fastlane run create_keychain electron-mac:electron-macKey 123456:123456
+        run: fastlane run create_keychain name:electron-macKey password:123456
       - name: electron mac os security identities
         run: security find-identity -v
       - name: Install dependencies
@@ -75,11 +75,11 @@ jobs:
       - name: Install dependencies
         run: yarn install
       # window에서 환경 변수 확인은 'set'으로 함.
-      - name: check env
-        env:
-          ELECTRON: true
-          APP_VERSION_NUMBER: 0.5.9
-        run: set
+#      - name: check env
+#        env:
+#          ELECTRON: true
+#          APP_VERSION_NUMBER: 0.5.9
+#        run: set
       - name: Build on Windows
         env:
           ELECTRON: true
