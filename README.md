@@ -31,3 +31,53 @@ DMG tool은 오직 macOS에서만 작동한다.
 ~~~
 
 ## [Building an electron app on github actions! Windows and MacOS](https://medium.com/@johnjjung/building-an-electron-app-on-github-actions-windows-and-macos-53ab69703f7c)
+
+* simple sample:
+    간단하게 특정 branch의 list를 출력하는 action
+~~~yml
+# name of your github action
+name: CI
+# this will help you specify where to run
+on:
+  push:
+    branches:
+      - electron
+
+# this is where the magic happens, each job happens in parallel btw
+jobs:
+  build_on_mac:
+    # github에서는 macOS, Windows, Linux를 전부 지원한다고 한다.
+    # github가 제공해주는 platform 중 무엇 위에서 돌릴 것인지다.(runs-on)
+    runs-on: macOS-latest
+    steps:
+      # 'uses'가 actions/checkout@v2 라는 프로젝트를 가져와서 실행한다.
+      # 이것은 어떤 github action's team이 제작한 것으로
+      # 내 저장소를 '$GITHUB_WORKSPACE'라는 곳으로 checkout 시켜서 내 workflow가
+      # access 가능하도록 돕는다.
+      - uses: actions/checkout@v2
+        with:
+          # 'electron' branch로 checkout 시킨다.
+          ref: electron
+      # node env를 setting하는 action이다.
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 10.16
+      - name: see directory
+        # ls -al을 실행한다.
+        run: ls -al
+
+  build_on_win:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: electron
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 10.16
+      - name: see directory
+        # UNIX 기반이 아니므로 dir를 실행한다.
+        run: dir
+~~~
+
+* main action

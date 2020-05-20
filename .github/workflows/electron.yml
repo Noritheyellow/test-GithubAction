@@ -1,10 +1,7 @@
 # name of your github action
 name: CI
 # this will help you specify where to run
-on:
-  push:
-    branches:
-      - electron
+on: push
 
 # this is where the magic happens, each job happens in parallel btw
 jobs:
