@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/Noritheyellow/test-GithubAction#readme",
   "devDependencies": {
-    "electron": "^9.0.0",
+    "electron": "^9.3.1",
     "electron-builder": "^22.6.1"
   },
   "dependencies": {
